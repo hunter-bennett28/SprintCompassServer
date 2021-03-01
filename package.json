@@ -1,0 +1,10 @@
+{
+  "name": "SprintCompassServer",
+  "version": "1.0.0",
+  "description": "Server component for SprintCompass, a sprint tracking webapp for agile projects",
+  "main": "index.js",
+  "repository": "https://github.com/hunter-bennett28/SprintCompassServer.git",
+  "author": "Hunter Bennett, Connor Black, James Dunton",
+  "license": "MIT",
+  "private": false
+}
