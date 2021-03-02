@@ -6,5 +6,18 @@
   "repository": "https://github.com/hunter-bennett28/SprintCompassServer.git",
   "author": "Hunter Bennett, Connor Black, James Dunton",
   "license": "MIT",
-  "private": false
+  "private": false,
+  "scripts": {
+    "start": "npx nodemon index"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "firebase": "^8.2.9",
+    "firebase-admin": "^9.5.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  }
 }
