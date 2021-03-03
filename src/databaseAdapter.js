@@ -17,6 +17,15 @@ const addProject = async (projectName, companyName = '', description = '') => {
   });
 };
 
+const checkProjectExists = async (projectName) => {
+  const query = db
+    .collection(projectsCollection)
+    .where('projectName', '==', projectName);
+  const results = await query.get();
+  return Boolean(results.docs.length);
+};
+
 module.exports = {
-  addProject
+  addProject,
+  checkProjectExists
 };

@@ -15,8 +15,22 @@ app.post('/api/addProject', async (req, res) => {
     await db.addProject(projectName, companyName, description);
     res.status(200).send({ success: true });
   } catch (err) {
+    console.error(err);
     res.status(500).send({
       message: `Add project failed: ${err.message}`
+    });
+  }
+});
+
+app.get('/api/projectExists', async (req, res) => {
+  try {
+    const { projectName } = req.query;
+    const exists = await db.checkProjectExists(projectName);
+    res.status(200).send({ exists });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send({
+      message: `Projects query failed: ${err.message}`
     });
   }
 });
