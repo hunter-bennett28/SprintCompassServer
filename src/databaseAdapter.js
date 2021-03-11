@@ -13,19 +13,46 @@ const addProject = async (projectName, companyName = '', description = '') => {
   await ref.set({
     projectName,
     companyName,
-    description
+    description,
+    productBacklog: []
   });
 };
 
-const checkProjectExists = async (projectName) => {
-  const query = db
+const updateProject = async (data) => {
+  const doc = await db
     .collection(projectsCollection)
-    .where('projectName', '==', projectName);
-  const results = await query.get();
+    .where('projectName', '==', data.projectName)
+    .get();
+  return doc.update(data);
+};
+
+const deleteProject = async (name) => {
+  return await db
+    .collection(projectsCollection)
+    .where('projectName', '==', projectName)
+    .delete();
+};
+
+const checkProjectExists = async (projectName) => {
+  const results = await db
+    .collection(projectsCollection)
+    .where('projectName', '==', projectName)
+    .get();
   return Boolean(results.docs.length);
+};
+
+const getProjectsByUsername = async (userName) => {};
+
+// TO BE REPLACED WITH GETBYUSENAME WHEN USERS IMPLEMENTED
+const getAllProjects = async () => {
+  const { docs } = await db.collection(projectsCollection).get();
+  return docs.map((doc) => doc.data());
 };
 
 module.exports = {
   addProject,
-  checkProjectExists
+  updateProject,
+  deleteProject,
+  checkProjectExists,
+  getAllProjects
 };

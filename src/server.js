@@ -17,7 +17,36 @@ app.post('/api/addProject', async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).send({
+      success: false,
       message: `Add project failed: ${err.message}`
+    });
+  }
+});
+
+app.post('/api/updateProject', async (req, res) => {
+  try {
+    const { updatedData } = req.body;
+    await db.updateProject(updatedData);
+    res.status(200).send({ success: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send({
+      success: false,
+      message: `Update project failed: ${err.message}`
+    });
+  }
+});
+
+app.delete('/api/deleteProject', async (req, res) => {
+  try {
+    const { projectName } = req.query;
+    const results = await db.deleteProject(projectName);
+    res.status(200).send({ success: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send({
+      success: false,
+      message: `Delete project failed: ${err.message}`
     });
   }
 });
@@ -27,6 +56,20 @@ app.get('/api/projectExists', async (req, res) => {
     const { projectName } = req.query;
     const exists = await db.checkProjectExists(projectName);
     res.status(200).send({ exists });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send({
+      success: false,
+      message: `Projects query failed: ${err.message}`
+    });
+  }
+});
+
+app.get('/api/projects', async (req, res) => {
+  try {
+    //const { userName } = req.query;
+    const projects = await db.getAllProjects();
+    res.status(200).send({ projects });
   } catch (err) {
     console.error(err);
     res.status(500).send({
