@@ -19,14 +19,16 @@ const addProject = async (projectName, companyName = '', description = '') => {
 };
 
 const updateProject = async (data) => {
-  const doc = await db
+  const { docs } = await db
     .collection(projectsCollection)
-    .where('projectName', '==', data.projectName)
+    .where('projectName', '==', data.oldName || data.projectName)
+    .limit(1)
     .get();
-  return doc.update(data);
+  data.oldName && delete data.oldName;
+  return docs[0].ref.update(data);
 };
 
-const deleteProject = async (name) => {
+const deleteProject = async (projectName) => {
   return await db
     .collection(projectsCollection)
     .where('projectName', '==', projectName)
