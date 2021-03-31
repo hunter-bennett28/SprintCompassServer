@@ -80,6 +80,48 @@ app.get('/api/projects', async (req, res) => {
   }
 });
 
+app.post('/api/addSprintByProjectName', async (req, res) => {
+  try {
+    const { projectName, sprint } = req.body;
+    await db.addSprintByProjectName(projectName, sprint);
+    res.status(200).send({ success: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send({
+      success: false,
+      message: `Add sprint failed: ${err.message}`
+    });
+  }
+});
+
+app.get('/api/getSprintsByProjectName', async (req, res) => {
+  try {
+    const { projectName } = req.query;
+    const result = await db.getSprintsByProjectName(projectName);
+    res.status(200).send({ result });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send({
+      success: false,
+      message: `Sprints query failed: ${err.message}`
+    });
+  }
+});
+
+app.post('/api/updateSprint', async (req, res) => {
+  try {
+    const { updatedData } = req.body;
+    await db.updateSprint(updatedData);
+    res.status(200).send({ success: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send({
+      success: false,
+      message: `Update project failed: ${err.message}`
+    });
+  }
+});
+
 const start = () => {
   app.listen(port, () => {
     console.log(`successfully listening on port ${port}`);

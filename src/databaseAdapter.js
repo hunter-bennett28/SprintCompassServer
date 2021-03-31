@@ -1,6 +1,6 @@
 const admin = require('firebase-admin');
 const serviceAccount = require('./firebaseSetup/sprint-compass-firebase-adminsdk-key');
-const { projectsCollection } = require('./envConfig');
+const { projectsCollection, sprintsCollection } = require('./envConfig');
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)
 });
@@ -59,11 +59,59 @@ const getProjectsByUser = async (user) => {
   );
 };
 
+//Fetch a project ID
+const getProjectIdByName = async (projectName) => {
+  let { docs } = await db
+    .collection(projectsCollection)
+    .where('projectName', '==', projectName)
+    .get();
+
+  //Will select the last (only) document with that name
+  return docs.map((doc) => doc.id);
+};
+
+const addSprintByProjectName = async (projectName, sprint) => {
+  let projectId = await getProjectIdByName(projectName);
+
+  const ref = db.collection(sprintsCollection).doc(); // empty doc for random id
+  await ref.set({
+    projectId,
+    userStories: sprint.userStories,
+    iteration: sprint.iteration
+  });
+};
+
+const getSprintsByProjectName = async (projectName) => {
+  let projectId = await getProjectIdByName(projectName);
+
+  //Select the sprints with the given id
+  let { docs } = await db
+    .collection(sprintsCollection)
+    .where('projectId', '==', `${projectId}`) //Selects different if its raw string vs variable
+    .get();
+
+  return docs.map((doc) => doc.data());
+};
+
+const updateSprint = async (updatedData) => {
+  const { docs } = await db
+    .collection(sprintsCollection)
+    .where('projectId', '==', updatedData.projectId)
+    .where('iteration', '==', updatedData.sprint.iteration)
+    .limit(1)
+    .get();
+
+  return docs[0].ref.update(updatedData);
+};
+
 module.exports = {
   addProject,
   updateProject,
   deleteProject,
   checkProjectExists,
   getAllProjects,
-  getProjectsByUser
+  getProjectsByUser,
+  addSprintByProjectName,
+  getSprintsByProjectName,
+  updateSprint
 };
