@@ -59,7 +59,6 @@ const getProjectIdByName = async (projectName) => {
     .get();
 
   //Will select the last (only) document with that name
-  //return docs.map((doc) => doc.id)[0];
   return docs[0].id;
 };
 
