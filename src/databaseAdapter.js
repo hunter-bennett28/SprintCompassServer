@@ -51,10 +51,19 @@ const getAllProjects = async () => {
   return docs.map((doc) => doc.data());
 };
 
+const getProjectsByUser = async (user) => {
+  const { docs } = await db.collection(projectsCollection).get();
+  const docObjects = docs.map((doc) => doc.data());
+  return docObjects.filter((doc) =>
+    doc.members?.find((member) => member.email === user)
+  );
+};
+
 module.exports = {
   addProject,
   updateProject,
   deleteProject,
   checkProjectExists,
-  getAllProjects
+  getAllProjects,
+  getProjectsByUser
 };

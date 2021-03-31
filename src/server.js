@@ -67,8 +67,10 @@ app.get('/api/projectExists', async (req, res) => {
 
 app.get('/api/projects', async (req, res) => {
   try {
-    //const { userName } = req.query;
-    const projects = await db.getAllProjects();
+    const user = req.query?.user;
+    const projects = await (user
+      ? db.getProjectsByUser(user)
+      : db.getAllProjects());
     res.status(200).send({ projects });
   } catch (err) {
     console.error(err);
