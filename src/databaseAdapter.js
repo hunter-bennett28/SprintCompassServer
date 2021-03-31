@@ -59,8 +59,8 @@ const getProjectIdByName = async (projectName) => {
     .get();
 
   //Will select the last (only) document with that name
-  return docs.map((doc) => doc.id);
-
+  //return docs.map((doc) => doc.id)[0];
+  return docs[0].id;
 };
 
 const addSprintByProjectName = async (projectName, sprint) => {
@@ -68,7 +68,7 @@ const addSprintByProjectName = async (projectName, sprint) => {
 
   const ref = db.collection(sprintsCollection).doc(); // empty doc for random id
   await ref.set({
-    projectId,
+    projectId: projectId,
     userStories: sprint.userStories,
     iteration: sprint.iteration,
   });
@@ -83,20 +83,19 @@ const getSprintsByProjectName = async (projectName) => {
     .where('projectId', '==', `${projectId}`) //Selects different if its raw string vs variable
     .get();
 
-  return docs.map((doc) => doc.data());
+  return docs[0].data();
 };
 
 const updateSprint = async (updatedData) => {
-
   const { docs } = await db
-  .collection(sprintsCollection)
-  .where('projectId', '==', updatedData.projectId)
-  .where('iteration', '==', updatedData.sprint.iteration)
-  .limit(1)
-  .get();
+    .collection(sprintsCollection)
+    .where('projectId', '==', updatedData.projectId)
+    .where('iteration', '==', updatedData.iteration)
+    .limit(1)
+    .get();
 
   return docs[0].ref.update(updatedData);
-}
+};
 
 module.exports = {
   addProject,
