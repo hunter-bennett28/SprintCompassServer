@@ -81,8 +81,7 @@ const getSprintsByProjectName = async (projectName) => {
     .collection(sprintsCollection)
     .where('projectId', '==', `${projectId}`) //Selects different if its raw string vs variable
     .get();
-
-  return docs[0].data();
+  return docs.map((doc) => doc.data());
 };
 
 const updateSprint = async (updatedData) => {
