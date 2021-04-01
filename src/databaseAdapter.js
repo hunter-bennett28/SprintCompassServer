@@ -15,6 +15,7 @@ const addProject = async (projectName, companyName = '', description = '') => {
     companyName,
     description,
     productBacklog: [],
+    members: [],
   });
 };
 
@@ -49,6 +50,14 @@ const getProjectsByUsername = async (userName) => {};
 const getAllProjects = async () => {
   const { docs } = await db.collection(projectsCollection).get();
   return docs.map((doc) => doc.data());
+};
+
+const getProjectsByUser = async (user) => {
+  const { docs } = await db.collection(projectsCollection).get();
+  const docObjects = docs.map((doc) => doc.data());
+  return docObjects.filter((doc) =>
+    doc.members?.find((member) => member.email === user)
+  );
 };
 
 //Fetch a project ID
@@ -101,6 +110,7 @@ module.exports = {
   deleteProject,
   checkProjectExists,
   getAllProjects,
+  getProjectsByUser,
   addSprintByProjectName,
   getSprintsByProjectName,
   updateSprint,
