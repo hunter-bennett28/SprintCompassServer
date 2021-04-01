@@ -2,7 +2,7 @@ const admin = require('firebase-admin');
 const serviceAccount = require('./firebaseSetup/sprint-compass-firebase-adminsdk-key');
 const { projectsCollection, sprintsCollection } = require('./envConfig');
 admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount)
+  credential: admin.credential.cert(serviceAccount),
 });
 
 const db = admin.firestore();
@@ -14,7 +14,8 @@ const addProject = async (projectName, companyName = '', description = '') => {
     projectName,
     companyName,
     description,
-    productBacklog: []
+    productBacklog: [],
+    members: [],
   });
 };
 
@@ -77,7 +78,7 @@ const addSprintByProjectName = async (projectName, sprint) => {
   await ref.set({
     projectId,
     userStories: sprint.userStories,
-    iteration: sprint.iteration
+    iteration: sprint.iteration,
   });
 };
 
@@ -113,5 +114,5 @@ module.exports = {
   getProjectsByUser,
   addSprintByProjectName,
   getSprintsByProjectName,
-  updateSprint
+  updateSprint,
 };
