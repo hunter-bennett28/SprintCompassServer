@@ -11,14 +11,14 @@ app.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodies
 
 app.post('/api/addProject', async (req, res) => {
   try {
-    const { projectName, companyName, description } = req.body;
-    await db.addProject(projectName, companyName, description);
+    const { projectName, companyName, description, members } = req.body;
+    await db.addProject(projectName, companyName, description, members);
     res.status(200).send({ success: true });
   } catch (err) {
     console.error(err);
     res.status(500).send({
       success: false,
-      message: `Add project failed: ${err.message}`
+      message: `Add project failed: ${err.message}`,
     });
   }
 });
@@ -32,7 +32,7 @@ app.post('/api/updateProject', async (req, res) => {
     console.error(err);
     res.status(500).send({
       success: false,
-      message: `Update project failed: ${err.message}`
+      message: `Update project failed: ${err.message}`,
     });
   }
 });
@@ -46,7 +46,7 @@ app.delete('/api/deleteProject', async (req, res) => {
     console.error(err);
     res.status(500).send({
       success: false,
-      message: `Delete project failed: ${err.message}`
+      message: `Delete project failed: ${err.message}`,
     });
   }
 });
@@ -60,7 +60,7 @@ app.get('/api/projectExists', async (req, res) => {
     console.error(err);
     res.status(500).send({
       success: false,
-      message: `Projects query failed: ${err.message}`
+      message: `Projects query failed: ${err.message}`,
     });
   }
 });
@@ -68,14 +68,12 @@ app.get('/api/projectExists', async (req, res) => {
 app.get('/api/projects', async (req, res) => {
   try {
     const user = req.query?.user;
-    const projects = await (user
-      ? db.getProjectsByUser(user)
-      : db.getAllProjects());
+    const projects = await (user ? db.getProjectsByUser(user) : db.getAllProjects());
     res.status(200).send({ projects });
   } catch (err) {
     console.error(err);
     res.status(500).send({
-      message: `Projects query failed: ${err.message}`
+      message: `Projects query failed: ${err.message}`,
     });
   }
 });
@@ -89,7 +87,7 @@ app.post('/api/addSprintByProjectName', async (req, res) => {
     console.error(err);
     res.status(500).send({
       success: false,
-      message: `Add sprint failed: ${err.message}`
+      message: `Add sprint failed: ${err.message}`,
     });
   }
 });
@@ -103,7 +101,7 @@ app.get('/api/getSprintsByProjectName', async (req, res) => {
     console.error(err);
     res.status(500).send({
       success: false,
-      message: `Sprints query failed: ${err.message}`
+      message: `Sprints query failed: ${err.message}`,
     });
   }
 });
@@ -117,7 +115,7 @@ app.post('/api/updateSprint', async (req, res) => {
     console.error(err);
     res.status(500).send({
       success: false,
-      message: `Update project failed: ${err.message}`
+      message: `Update project failed: ${err.message}`,
     });
   }
 });

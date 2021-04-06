@@ -8,14 +8,14 @@ admin.initializeApp({
 const db = admin.firestore();
 
 // Adds a new project to the projects collection with a randomly generated id
-const addProject = async (projectName, companyName = '', description = '') => {
+const addProject = async (projectName, companyName = '', description = '', members = []) => {
   const ref = db.collection(projectsCollection).doc(); // empty doc for random id
   await ref.set({
     projectName,
     companyName,
     description,
     productBacklog: [],
-    members: [],
+    members: members,
   });
 };
 
@@ -30,10 +30,7 @@ const updateProject = async (data) => {
 };
 
 const deleteProject = async (projectName) => {
-  return await db
-    .collection(projectsCollection)
-    .where('projectName', '==', projectName)
-    .delete();
+  return await db.collection(projectsCollection).where('projectName', '==', projectName).delete();
 };
 
 const checkProjectExists = async (projectName) => {
@@ -44,8 +41,6 @@ const checkProjectExists = async (projectName) => {
   return Boolean(results.docs.length);
 };
 
-const getProjectsByUsername = async (userName) => {};
-
 // TO BE REPLACED WITH GETBYUSENAME WHEN USERS IMPLEMENTED
 const getAllProjects = async () => {
   const { docs } = await db.collection(projectsCollection).get();
@@ -55,9 +50,7 @@ const getAllProjects = async () => {
 const getProjectsByUser = async (user) => {
   const { docs } = await db.collection(projectsCollection).get();
   const docObjects = docs.map((doc) => doc.data());
-  return docObjects.filter((doc) =>
-    doc.members?.find((member) => member.email === user)
-  );
+  return docObjects.filter((doc) => doc.members?.find((member) => member.email === user));
 };
 
 //Fetch a project ID
