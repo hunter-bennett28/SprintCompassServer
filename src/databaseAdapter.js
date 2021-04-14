@@ -8,14 +8,27 @@ admin.initializeApp({
 const db = admin.firestore();
 
 // Adds a new project to the projects collection with a randomly generated id
-const addProject = async (projectName, companyName = '', description = '', members = []) => {
+const addProject = async (
+  projectName,
+  teamName = '',
+  description = '',
+  startDate = Date.now(),
+  hoursPerPoint = 0,
+  totalPoints = 0,
+  totalCost = 0,
+  members = []
+) => {
   const ref = db.collection(projectsCollection).doc(); // empty doc for random id
   await ref.set({
     projectName,
-    companyName,
+    teamName,
     description,
+    startDate,
+    hoursPerPoint,
+    totalPoints,
+    totalCost,
+    members,
     productBacklog: [],
-    members: members,
   });
 };
 
