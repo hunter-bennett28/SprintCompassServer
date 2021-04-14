@@ -11,8 +11,16 @@ app.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodies
 
 app.post('/api/addProject', async (req, res) => {
   try {
-    const { projectName, companyName, description, members } = req.body;
-    await db.addProject(projectName, companyName, description, members);
+    await db.addProject(
+      req.body.projectName,
+      req.body.teamName,
+      req.body.description,
+      req.body.startDate,
+      req.body.hoursPerPoint,
+      req.body.totalPoints,
+      req.body.totalCost,
+      req.body.members
+    );
     res.status(200).send({ success: true });
   } catch (err) {
     console.error(err);
