@@ -33,17 +33,29 @@ const addProject = async (
 };
 
 const updateProject = async (data) => {
+  //Check if there are any members left on the project
+  if(data.members.length<=0)
+    return await deleteProject(data.projectName);
+  
   const { docs } = await db
     .collection(projectsCollection)
     .where('projectName', '==', data.oldName || data.projectName)
     .limit(1)
     .get();
   data.oldName && delete data.oldName;
+
   return docs[0].ref.update(data);
 };
 
 const deleteProject = async (projectName) => {
-  return await db.collection(projectsCollection).where('projectName', '==', projectName).delete();
+  const { docs } = await db
+    .collection(projectsCollection)
+    .where('projectName', '==', projectName)
+    .limit(1)
+    .get();
+  
+  //Delete the first project document
+  return await db.collection(projectsCollection).doc(docs[0].id).delete();
 };
 
 const checkProjectExists = async (projectName) => {
